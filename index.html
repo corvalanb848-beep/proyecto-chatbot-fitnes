@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#171a18">
+    <meta name="description" content="Conoce mejor tu alimentación, registra tus comidas y sigue tu progreso con FitAI. Escanea un plato con IA y encuentra en un solo lugar herramientas para entrenar y cuidarte.">
+    <meta name="application-name" content="FitAI">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_AR">
+    <meta property="og:site_name" content="FitAI">
+    <meta property="og:title" content="FitAI | Alimentación y movimiento, con más claridad">
+    <meta property="og:description" content="Escanea tus comidas, explora tus nutrientes y acompaña tu progreso con FitAI.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="FitAI | Alimentación y movimiento, con más claridad">
+    <meta name="twitter:description" content="Escanea tus comidas, explora tus nutrientes y acompaña tu progreso con FitAI.">
+    <title>FitAI | Escáner nutricional con IA y seguimiento fitness</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" defer></script>
+    <script src="food-scanner.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegación principal">
+        <a class="brand" href="#presentacion" data-view="presentacion" aria-label="FitAI, descubrir"><span class="brand-mark">F</span><span>fit<span class="brand-light">ai</span></span></a>
+        <div class="side-label">TU ESPACIO</div>
+        <nav class="side-nav">
+          <a class="nav-link" href="#presentacion" data-view="presentacion"><span class="nav-icon">✦</span>Descubrir FitAI</a>
+          <a class="nav-link is-active" href="#inicio" data-view="inicio"><span class="nav-icon">⌂</span>Mi espacio</a>
+          <a class="nav-link" href="#entrenamiento" data-view="entrenamiento"><span class="nav-icon">◈</span>Entrenamiento</a>
+          <a class="nav-link" href="#nutrition-scanner" data-view="nutricion"><span class="nav-icon">◉</span>Nutrición</a>
+          <a class="nav-link" href="#mapa" data-view="mapa"><span class="nav-icon">⌖</span>Mapa</a>
+          <a class="nav-link" href="#progreso" data-view="progreso"><span class="nav-icon">↗</span>Mi progreso</a>
+        </nav>
+        <div class="sidebar-spacer"></div>
+        <div class="sidebar-coach">
+          <div class="coach-orbit"><span>✳</span></div>
+          <p class="coach-label">ENTRENA CON INTENCIÓN</p>
+          <p class="coach-copy">Un paso a la vez. La constancia hace el resto.</p>
+          <button class="text-button" data-open-premium>Explorar planes <span>→</span></button>
+        </div>
+        <div class="sidebar-footer"><span class="status-dot"></span> Espacio personal <span class="footer-lock">●</span></div>
+      </aside>
+
+      <main class="main-area" id="inicio">
+        <header class="topbar">
+          <button class="mobile-brand" data-view="presentacion" aria-label="Descubrir FitAI">fit<span>ai</span></button>
+          <div class="topbar-date" id="today-label">TU PLAN, A TU RITMO</div>
+          <div class="topbar-right"><span class="streak-chip"><span class="streak-icon" aria-hidden="true">✳</span> <b id="streak-count">0</b> <span id="streak-label">días activos</span></span><button class="avatar" id="open-profile" aria-label="Abrir perfil">B</button></div>
+        </header>
+
+        <section class="marketing-hero" id="presentacion" aria-labelledby="marketing-title">
+          <div class="marketing-copy">
+            <p class="marketing-eyebrow"><span aria-hidden="true">✳</span> ALIMENTACIÓN Y MOVIMIENTO, CON MÁS CLARIDAD</p>
+            <h1 id="marketing-title">Cuida tu progreso.<br><span>A tu manera.</span></h1>
+            <p class="marketing-lede">Entiende mejor lo que comes, registra tus hábitos y explora herramientas para moverte con intención. FitAI reúne nutrición, entrenamiento y seguimiento en un solo espacio.</p>
+            <div class="marketing-actions">
+              <button class="marketing-primary" type="button" data-marketing-cta data-open-onboarding>Empezar gratis <span aria-hidden="true">→</span></button>
+              <a class="marketing-secondary" href="#como-funciona">Descubrir FitAI <span aria-hidden="true">↓</span></a>
+            </div>
+            <p class="marketing-trust"><span aria-hidden="true">✓</span> Empieza sin crear una cuenta · Tus registros actuales quedan en este navegador</p>
+          </div>
+          <div class="marketing-art" aria-label="Ilustración de la experiencia FitAI">
+            <div class="art-orbit orbit-a"></div><div class="art-orbit orbit-b"></div>
+            <div class="art-sparkle" aria-hidden="true">✳</div>
+            <div class="product-card product-card-main">
+              <div class="product-card-top"><span class="product-mark">F</span><span>Tu resumen</span><span class="product-live"><i></i> FITAI</span></div>
+              <p class="product-greeting">UN PASO A LA VEZ</p>
+              <strong class="product-title">Tu semana, a tu ritmo.</strong>
+              <div class="product-chart" aria-hidden="true"><i style="--h:34%"></i><i style="--h:62%"></i><i style="--h:45%"></i><i style="--h:82%"></i><i style="--h:52%"></i><i style="--h:72%"></i><i style="--h:28%"></i></div>
+              <div class="product-days"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+              <div class="product-feature"><span class="product-feature-icon">◉</span><span><b>Escáner nutricional</b><small>Una estimación para orientarte</small></span><span class="product-arrow">↗</span></div>
+              <div class="product-foot"><span>Tu progreso no tiene que ser perfecto.</span><span>✦</span></div>
+            </div>
+            <div class="product-float"><span>✳</span><span><b>Más consciente.</b><small>Más a tu manera.</small></span></div>
+            <p class="marketing-art-caption">Una vista ilustrativa de FitAI · No son datos de una persona</p>
+          </div>
+        </section>
+
+        <section class="marketing-section how-section" id="como-funciona" aria-labelledby="how-title">
+          <div class="marketing-section-heading"><p class="marketing-eyebrow">SIMPLE PARA EMPEZAR</p><h2 id="how-title">Hábitos pequeños.<br><span>Más claridad cada día.</span></h2><p>Sin promesas mágicas ni reglas rígidas: herramientas prácticas para observar tu rutina y avanzar con tu propio ritmo.</p></div>
+          <div class="steps-grid">
+            <article class="step-card"><span class="step-number">01</span><span class="step-icon">◎</span><h3>Empieza por lo que te importa</h3><p>Elige una intención personal y una meta semanal que se sienta posible para ti.</p></article>
+            <article class="step-card"><span class="step-number">02</span><span class="step-icon">◉</span><h3>Registra y descubre</h3><p>Escanea una comida, revisa su estimación nutricional o anota tus sesiones.</p></article>
+            <article class="step-card"><span class="step-number">03</span><span class="step-icon">↗</span><h3>Observa tu progreso</h3><p>Consulta tus registros locales, celebra la constancia y ajusta tus objetivos cuando quieras.</p></article>
+          </div>
+        </section>
+
+        <section class="marketing-feature-grid" aria-label="Herramientas de FitAI">
+          <article class="marketing-feature feature-scan" id="funcion-escaner">
+            <div class="feature-copy"><p class="marketing-eyebrow">NUTRICIÓN CON IA</p><h2>Tu plato, más fácil de entender.</h2><p>Una foto puede estimar los alimentos visibles y sus nutrientes. Revisa el resultado, ajusta la porción y guárdalo en tu diario.</p><ul><li>Calorías y macronutrientes aproximados</li><li>Porciones editables antes de guardar</li><li>Los ingredientes ocultos no se adivinan</li></ul><button class="feature-action" type="button" data-go-scanner>Probar el escáner <span>→</span></button></div>
+            <div class="feature-visual scanner-visual" aria-hidden="true"><div class="plate-rings"><span>✳</span></div><div class="scanner-scanline"></div><span class="visual-tag">LECTURA VISUAL<br><b>ESTIMACIÓN, NO MEDICIÓN</b></span><span class="visual-nutrient">proteína · fibra · energía</span></div>
+          </article>
+          <article class="marketing-feature feature-nutrition" id="funcion-nutricion">
+            <div class="feature-visual nutrition-visual" aria-hidden="true"><div class="nutrition-ring"><span>FitAI</span></div><div class="nutrition-legend"><i></i> Proteínas <b>—</b><i></i> Carbohidratos <b>—</b><i></i> Grasas <b>—</b></div><small>Vista ilustrativa · sin datos personales</small></div>
+            <div class="feature-copy"><p class="marketing-eyebrow">DIARIO NUTRICIONAL</p><h2>Registra lo que eliges.</h2><p>Guarda alimentos analizados, revisa las calorías y los macronutrientes que registraste hoy y conserva el control de tus porciones.</p><ul><li>Historial en este navegador</li><li>Resumen diario de lo registrado</li><li>Sin sincronización de cuenta todavía</li></ul><button class="feature-action" type="button" data-go-scanner>Explorar nutrición <span>→</span></button></div>
+          </article>
+        </section>
+
+        <section class="marketing-goals" id="planes-personales">
+          <div><p class="marketing-eyebrow">PROGRESO SIN PRESIÓN</p><h2>Un plan que empieza<br><span>con tus propias metas.</span></h2><p>Elige una preferencia y cuántas sesiones por semana te gustaría registrar. FitAI puede guardar esa configuración en tu dispositivo y usarla para personalizar mensajes sencillos.</p><button class="marketing-primary" type="button" data-open-onboarding>Configurar mi espacio <span aria-hidden="true">→</span></button></div>
+          <div class="goal-demo"><div class="goal-demo-head"><span>OBJETIVO SEMANAL</span><span>AJUSTABLE</span></div><div class="goal-progress"><span></span></div><div class="goal-demo-foot"><b>Tu ritmo, tus reglas.</b><span>Las metas no son consejo médico.</span></div><div class="goal-tags"><span>Movimiento</span><span>Nutrición</span><span>Constancia</span></div></div>
+        </section>
+
+        <section class="marketing-plans" id="planes">
+          <div class="marketing-section-heading"><p class="marketing-eyebrow">CLARO DESDE EL PRINCIPIO</p><h2>Empieza gratis.<br><span>Decide después.</span></h2><p>Lo disponible hoy, sin precios engañosos ni cobros sorpresa.</p></div>
+          <div class="plan-cards">
+            <article class="plan-card plan-free"><span class="plan-label">DISPONIBLE</span><h3>FitAI gratis</h3><p class="plan-price">Gratis <span>en esta versión</span></p><ul><li>Escáner nutricional con IA*</li><li>Diario local y resumen de hoy</li><li>Rutina inicial y registro de sesiones</li><li>Mapa y progreso semanal</li></ul><button type="button" class="marketing-primary" data-marketing-cta data-open-onboarding>Empezar gratis <span aria-hidden="true">→</span></button><small>*El análisis con IA requiere configurar el servicio y su clave en el servidor.</small></article>
+            <article class="plan-card plan-premium"><span class="plan-label">EN PREPARACIÓN · SIN COBROS</span><h3>FitAI Premium</h3><p class="plan-price">Aún no disponible</p><p>La idea es ofrecer historial ampliado, estadísticas avanzadas, planificación y herramientas adicionales de IA cuando estén implementadas y verificadas.</p><ul><li>No hay suscripción activa</li><li>No hay precio confirmado</li><li>No se solicitan pagos</li></ul><button type="button" class="plan-notify" data-premium-info>Ver estado del plan</button></article>
+          </div>
+        </section>
+
+        <section class="campaign-section" id="ideas-sociales" aria-labelledby="campaign-title">
+          <div class="campaign-heading"><div><p class="marketing-eyebrow">KIT DE CONTENIDO · BORRADORES</p><h2 id="campaign-title">Ideas útiles para compartir.</h2><p>Textos iniciales para Reels, TikTok y Shorts. No se publica nada automáticamente ni son resultados de usuarios reales.</p></div><span class="campaign-mark">✦</span></div>
+          <div class="campaign-grid">
+            <article class="campaign-card"><span>EDUCACIÓN · 20–30 S</span><h3>La foto no pesa tu plato</h3><p>“Un escáner puede orientar, pero una imagen no conoce el peso exacto ni lo que no se ve. Revisa la porción y usa la estimación como referencia.”</p><button type="button" class="campaign-copy" data-copy-campaign="La foto no pesa tu plato: un escáner puede orientar, pero una imagen no conoce el peso exacto ni lo que no se ve. Revisa la porción y usa la estimación como referencia. Descubrí FitAI.">Copiar guion</button></article>
+            <article class="campaign-card"><span>DEMOSTRACIÓN · 15–20 S</span><h3>Del plato al diario</h3><p>“Elige una foto, revisa los nutrientes estimados, ajusta los gramos y guarda la comida en tu diario. Así funciona el escáner de FitAI.”</p><button type="button" class="campaign-copy" data-copy-campaign="Del plato al diario: elegí una foto, revisá los nutrientes estimados, ajustá los gramos y guardá la comida en tu diario. Así funciona el escáner de FitAI. Probá FitAI gratis.">Copiar guion</button></article>
+            <article class="campaign-card"><span>HÁBITOS · 15–25 S</span><h3>Un objetivo que sí es tuyo</h3><p>“No hace falta perseguir una rutina perfecta. Elige una meta semanal posible, registra tus sesiones y ajusta tu ritmo cuando lo necesites.”</p><button type="button" class="campaign-copy" data-copy-campaign="Un objetivo que sí es tuyo: no hace falta perseguir una rutina perfecta. Elegí una meta semanal posible, registrá tus sesiones y ajustá tu ritmo cuando lo necesites. Descubrí FitAI.">Copiar guion</button></article>
+          </div>
+          <p class="campaign-note" id="campaign-copy-status" role="status" aria-live="polite">Guiones editables: verifica los datos y agrega los enlaces oficiales de FitAI antes de publicar.</p>
+        </section>
+
+        <section class="marketing-faq" id="preguntas" aria-labelledby="faq-title">
+          <div class="marketing-section-heading"><p class="marketing-eyebrow">PREGUNTAS FRECUENTES</p><h2 id="faq-title">Transparencia, primero.</h2></div>
+          <details><summary>¿FitAI ya requiere crear una cuenta?</summary><p>No. Esta versión guarda los registros en el navegador actual; no hay cuentas ni sincronización entre dispositivos. El asistente de bienvenida guarda preferencias localmente.</p></details>
+          <details><summary>¿El escáner calcula calorías exactas?</summary><p>No. La IA estima los alimentos visibles. Una foto no revela el peso exacto ni los ingredientes ocultos. El análisis requiere conexión y una clave configurada en el servidor.</p></details>
+          <details><summary>¿FitAI ya cobra una suscripción Premium?</summary><p>No. Premium todavía no está disponible: no hay precio confirmado, pagos ni funciones avanzadas activadas.</p></details>
+          <details><summary>¿FitAI publica contenido en mis redes?</summary><p>No. Esta versión solo ofrece guiones de campaña para copiar. No está conectada a Instagram, TikTok, YouTube ni publica contenido.</p></details>
+          <details><summary>¿Puedo sincronizar entrenamientos de mi reloj?</summary><p>Todavía no. HealthKit, Health Connect y Wear OS no están integrados en esta aplicación.</p></details>
+        </section>
+
+        <footer class="marketing-footer" id="legal">
+          <div class="footer-brand"><a class="brand" href="#presentacion" data-view="presentacion"><span class="brand-mark">F</span><span>fit<span class="brand-light">ai</span></span></a><p>Más claridad para cuidar tu progreso, a tu manera.</p></div>
+          <div class="footer-links"><a href="#funcion-escaner">Nutrición</a><a href="#planes">Planes</a><a href="#preguntas">Preguntas</a><a href="#privacidad-local">Privacidad</a><a href="#terminos-fitai">Términos</a><button type="button" data-share-fitai>Compartir FitAI</button></div>
+          <div class="footer-disclosures"><p id="privacidad-local"><b>Privacidad:</b> los registros actuales se guardan localmente. No hay cuenta ni analítica remota configurada.</p><p id="terminos-fitai"><b>Información:</b> las estimaciones nutricionales son orientativas y no sustituyen asesoramiento profesional. Antes del lanzamiento comercial se deben publicar políticas legales revisadas.</p><p>Contacto y perfiles oficiales de redes: deben configurarse antes de publicar.</p></div>
+          <div class="footer-bottom"><span>© <span id="footer-year"></span> FitAI · Una herramienta para acompañar tus hábitos.</span><button type="button" id="analytics-settings">Privacidad de métricas</button></div>
+        </footer>
+
+        <section class="personal-recommendation" id="mi-siguiente-paso" aria-label="Recomendación personal">
+          <span class="recommendation-icon" aria-hidden="true">✦</span>
+          <div><p class="eyebrow">UN PASO A TU RITMO</p><strong id="recommendation-title">Empieza por lo que te importa.</strong><p id="recommendation-copy">Configura una intención personal; tus preferencias se guardan solo en este navegador.</p></div>
+          <button type="button" class="recommendation-action" id="recommendation-action" data-open-onboarding>Configurar mi espacio <span>→</span></button>
+        </section>
+
+        <section class="welcome-row" aria-labelledby="welcome-title">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> TU ESPACIO DE BIENESTAR</p>
+            <h2 class="welcome-title" id="welcome-title">Un buen día para<br><span>sentirte más fuerte.</span></h2>
+            <p class="welcome-copy">Pequeños hábitos, grandes cambios. ¿Qué te gustaría hacer hoy?</p>
+          </div>
+          <div class="week-card" aria-label="Actividad de la semana">
+            <div class="week-card-head"><span>ESTA SEMANA</span><span class="week-total"><b id="week-count">0</b> / <span id="week-goal-label">4</span> sesiones</span></div>
+            <div class="week-bars" id="week-bars" aria-label="Sesiones completadas por día"></div>
+            <div class="week-days" id="week-days"></div>
+          </div>
+        </section>
+
+        <section class="quick-grid" aria-label="Accesos rápidos">
+          <button class="quick-card workout-quick" data-view="entrenamiento">
+            <span class="quick-icon lime-icon" aria-hidden="true">↗</span>
+            <span class="quick-card-content"><span class="quick-kicker" id="day-greeting">BUEN DÍA</span><strong>Entrena con intención</strong><span class="card-description" id="daily-motivation">Cada movimiento cuenta. Hoy puedes dar el primero.</span><span class="quick-link">Empezar rutina <b>→</b></span></span>
+            <span class="quick-decoration" aria-hidden="true">✳</span>
+          </button>
+          <button class="quick-card nutrition-quick" data-view="nutricion">
+            <span class="quick-icon orange-icon" aria-hidden="true">✳</span>
+            <span class="quick-card-content"><span class="quick-kicker">NUTRICIÓN COTIDIANA</span><strong>Conoce mejor tu plato</strong><span class="card-description">Analiza una comida y consulta sus nutrientes estimados en tu diario.</span><span class="quick-link">Abrir escáner <b>→</b></span></span>
+            <span class="nutrition-graphic" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+          <button class="quick-card chat-quick" data-view="chat">
+            <span class="quick-icon dark-icon" aria-hidden="true">✦</span>
+            <span class="quick-card-content"><span class="quick-kicker">TU ASISTENTE</span><strong>Hablemos de tus objetivos</strong><span class="card-description">Prepara tus preguntas sobre rutinas, comidas y planificación.</span><span class="quick-link">Abrir chat <b>→</b></span></span>
+            <span class="chat-decoration" aria-hidden="true">···</span>
+          </button>
+        </section>
+
+        <section class="food-section" id="nutrition-scanner" aria-labelledby="food-title">
+          <article class="panel food-scanner-panel">
+            <div class="food-heading">
+              <div>
+                <p class="eyebrow"><span class="eyebrow-line"></span> ESCÁNER INTELIGENTE DE ALIMENTOS</p>
+                <h2 id="food-title">Descubre qué comes con FitAI</h2>
+                <p class="food-intro">Analiza tus comidas, conoce sus nutrientes y toma mejores decisiones para alcanzar tus objetivos.</p>
+              </div>
+              <span class="food-heading-mark" aria-hidden="true">✳</span>
+            </div>
+
+            <div class="food-status" id="food-service-status" role="status" aria-live="polite">
+              Comprobando la conexión segura con el servicio de análisis…
+            </div>
+
+            <div class="food-picker" id="food-picker">
+              <div class="food-picker-icon" aria-hidden="true">◉</div>
+              <h3>Una foto clara ayuda a estimar mejor</h3>
+              <p>Centra el plato, procura tener buena luz y evita incluir información personal.</p>
+              <div class="food-actions">
+                <button class="primary-button food-camera-button" id="food-open-camera" type="button"><span aria-hidden="true">⌾</span> Escanear con cámara</button>
+                <button class="food-secondary-button" id="food-open-gallery" type="button"><span aria-hidden="true">▧</span> Subir una foto</button>
+              </div>
+              <input class="sr-only" id="food-gallery-input" type="file" accept="image/*">
+              <input class="sr-only" id="food-camera-fallback" type="file" accept="image/*" capture="environment">
+              <p class="food-privacy-note">La imagen se procesa para el análisis y no se guarda en tu diario.</p>
+            </div>
+
+            <div class="food-camera-view" id="food-camera-view" hidden>
+              <video id="food-camera-video" autoplay playsinline muted aria-label="Vista de la cámara para fotografiar un alimento"></video>
+              <div class="food-camera-controls">
+                <button class="food-secondary-button" id="food-camera-cancel" type="button">Cancelar</button>
+                <button class="primary-button" id="food-camera-capture" type="button">Tomar foto</button>
+              </div>
+            </div>
+
+            <div class="food-preview" id="food-preview" hidden>
+              <img id="food-preview-image" alt="Vista previa del alimento seleccionado">
+              <div class="food-preview-meta">
+                <div><span class="food-preview-label">FOTO SELECCIONADA</span><strong id="food-preview-name"></strong></div>
+                <button class="food-text-button" id="food-change-image" type="button">Cambiar foto</button>
+              </div>
+              <button class="primary-button food-analyze-button" id="food-analyze" type="button">Analizar alimento con IA <span aria-hidden="true">→</span></button>
+            </div>
+
+            <div class="food-progress" id="food-progress" role="status" aria-live="polite" hidden>
+              <span class="food-spinner" aria-hidden="true"></span>
+              <div><strong>Analizando tu comida</strong><span>Estimamos los alimentos y sus nutrientes. Esto puede tardar unos segundos.</span></div>
+            </div>
+            <div class="food-error" id="food-error" role="alert" hidden>
+              <div><strong id="food-error-title">No pudimos completar el análisis</strong><span id="food-error-message"></span></div>
+              <button class="food-secondary-button" id="food-retry" type="button">Reintentar</button>
+            </div>
+
+            <section class="food-results" id="food-results" aria-labelledby="food-results-title" hidden>
+              <div class="food-result-header">
+                <div><p class="eyebrow">ESTIMACIÓN DE TU PLATO</p><h3 id="food-results-title">Resultado del análisis</h3></div>
+                <span class="food-confidence" id="food-confidence"></span>
+              </div>
+              <div class="food-result-layout">
+                <img id="food-result-image" alt="Alimento analizado">
+                <div class="food-result-fields">
+                  <label for="food-result-name">Nombre del alimento o plato</label>
+                  <input id="food-result-name" type="text" maxlength="120" autocomplete="off">
+                  <label for="food-result-portion">Porción estimada (g)</label>
+                  <div class="portion-input"><input id="food-result-portion" type="number" min="1" max="10000" step="1" inputmode="decimal"><span>gramos</span></div>
+                  <p class="food-portion-feedback" id="food-portion-feedback" aria-live="polite"></p>
+                  <p id="food-result-type"></p>
+                </div>
+              </div>
+              <div class="food-nutrition-heading"><p class="eyebrow">ANÁLISIS NUTRICIONAL</p><span>Valores aproximados para la porción</span></div>
+              <div class="food-macros" id="food-macros"></div>
+              <p class="food-nutrition-guidance">Proteínas, carbohidratos y grasas describen nutrientes de la porción; la fibra solo se muestra cuando hay datos suficientes. Úsalo como orientación general: una fotografía no permite evaluar por sí sola la calidad o adecuación de una comida. Una alimentación variada puede incluir vegetales o frutas, una fuente de proteína y alimentos que se ajusten a tus preferencias.</p>
+              <div class="food-detail-grid">
+                <div class="food-components" id="food-components-wrap"><h4>Alimentos identificados</h4><ul id="food-components"></ul></div>
+                <div class="food-ingredients" id="food-ingredients-wrap"><h4>Ingredientes visibles</h4><p id="food-ingredients"></p></div>
+              </div>
+              <p class="food-disclaimer">Estimación visual aproximada: una fotografía no permite conocer con precisión el peso, los ingredientes ocultos ni las calorías exactas. Revisa y ajusta la porción según lo que serviste.</p>
+              <div class="food-result-actions">
+                <button class="primary-button" id="food-save-meal" type="button">Agregar a mi diario nutricional</button>
+                <button class="food-secondary-button" id="food-scan-another" type="button">Escanear otro alimento</button>
+              </div>
+            </section>
+          </article>
+
+          <article class="panel food-diary-panel" aria-labelledby="food-diary-title">
+            <div class="food-diary-heading"><div><p class="eyebrow">TU REGISTRO DE HOY</p><h3 id="food-diary-title">Diario nutricional</h3></div><span class="food-diary-date" id="food-diary-date"></span></div>
+            <div class="food-daily-summary" id="food-daily-summary"></div>
+            <div class="food-diary-list" id="food-diary-list" aria-live="polite"></div>
+            <p class="food-diary-note">Los alimentos se guardan en este navegador y no se sincronizan con otros dispositivos.</p>
+          </article>
+        </section>
+
+        <section class="map-section" id="mapa" aria-labelledby="map-title">
+          <article class="panel map-panel">
+            <div class="map-heading">
+              <div><p class="eyebrow">ACTIVIDAD AL AIRE LIBRE</p><h2 id="map-title">Explora tu entorno</h2><p class="map-description">Consulta el mapa y ubica tu posición cuando quieras salir a moverte.</p></div>
+              <button class="primary-button location-button" id="map-location" type="button"><span aria-hidden="true">⌖</span> Mi ubicación</button>
+            </div>
+            <p class="map-status" id="map-status" role="status" aria-live="polite">El mapa se cargará al abrir esta sección.</p>
+            <div class="map-canvas" id="fitai-map" role="region" aria-label="Mapa interactivo" aria-busy="false"></div>
+            <p class="location-status" id="location-status" role="status" aria-live="polite"></p>
+          </article>
+          <article class="panel routes-notice">
+            <span class="route-icon" aria-hidden="true">↗</span>
+            <div><p class="eyebrow">RUTAS DE ENTRENAMIENTO</p><h3>El registro de recorridos no está disponible</h3><p>Esta copia de FitAI no contiene código para iniciar, guardar o consultar rutas. La geolocalización solo centra el mapa y no registra tu recorrido.</p></div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel plan-panel" id="plan-section">
+            <div class="panel-heading"><div><p class="eyebrow">PARA EMPEZAR</p><h2>Tu movimiento de hoy</h2></div><span class="pill">20 MIN</span></div>
+            <div class="routine-feature">
+              <div class="routine-art" aria-hidden="true"><span class="art-ring ring-one"></span><span class="art-ring ring-two"></span><span class="art-number">A</span><span class="art-caption">FULL<br>BODY</span></div>
+              <div class="routine-info"><span class="routine-type">FUERZA · NIVEL INICIAL</span><h3>Despierta tu energía</h3><p>Una rutina equilibrada para activar todo el cuerpo, sin equipamiento.</p><div class="routine-meta"><span>◷ 20 min</span><span>⌁ 5 ejercicios</span><span>⌂ En casa</span></div><button class="primary-button" id="start-workout">Comenzar sesión <span>→</span></button></div>
+            </div>
+          </article>
+
+          <article class="panel progress-panel" id="progress-section">
+            <div class="panel-heading"><div><p class="eyebrow">TU CONSTANCIA</p><h2>Progreso reciente</h2></div><button class="icon-button" aria-label="Registrar progreso" id="open-progress">+</button></div>
+            <div class="progress-stat"><strong id="total-sessions">0</strong><span>sesiones en total</span><span class="week-total"><b id="progress-week-count">0</b> / <span id="progress-week-goal">4</span> esta semana</span></div>
+            <div class="progress-chart" id="progress-chart" role="img" aria-label="Sesiones de entrenamiento por día esta semana"></div>
+            <div class="chart-empty" id="progress-empty" hidden><span aria-hidden="true">✳</span><strong>Tu semana empieza con un paso.</strong><span>Registra una sesión y aquí verás cómo avanzas hacia tu meta.</span></div>
+            <div class="chart-legend"><span><i></i> Sesiones por día</span><span class="chart-goal-label"><i></i> Objetivo semanal</span><button data-view="progreso">Ver actividad →</button><button type="button" id="share-progress">Compartir progreso</button></div>
+          </article>
+        </section>
+
+        <section class="progress-details" aria-label="Hábitos y logros">
+          <article class="panel wellness-panel" aria-labelledby="wellness-title">
+            <div class="subsection-heading"><div><p class="eyebrow">SEGUIMIENTO PERSONAL</p><h2 id="wellness-title">Hábitos diarios</h2></div><div class="streak-card"><span class="streak-flame" aria-hidden="true">✳</span><strong id="progress-streak-count">0</strong><span id="progress-streak-label">días de racha</span></div></div>
+            <div class="wellness-rings">
+              <article class="ring-stat" aria-label="Calorías: sin registro"><div class="activity-ring" aria-hidden="true"><span>--</span></div><strong>Calorías</strong><span class="ring-status">Sin registro</span></article>
+              <article class="ring-stat" aria-label="Agua: sin registro"><div class="activity-ring water-ring" aria-hidden="true"><span>--</span></div><strong>Agua</strong><span class="ring-status">Sin registro</span></article>
+              <article class="ring-stat" aria-label="Pasos: sin registro"><div class="activity-ring steps-ring" aria-hidden="true"><span>--</span></div><strong>Pasos</strong><span class="ring-status">Sin registro</span></article>
+            </div>
+            <p class="tracking-note">Estos datos aparecerán cuando conectes un registro de actividad.</p>
+          </article>
+          <article class="panel achievements-panel" aria-labelledby="achievements-title">
+            <div class="subsection-heading"><div><p class="eyebrow">CELEBRA CADA AVANCE</p><h2 id="achievements-title">Pequeños grandes logros</h2></div><span id="achievement-count">0 / 4</span></div>
+            <ul class="achievement-list" id="achievement-list">
+              <li class="achievement" data-achievement="first"><span class="achievement-icon" aria-hidden="true">✦</span><span><strong>Primer paso</strong><small>Completa 1 sesión</small></span><span class="achievement-state">Pendiente</span></li>
+              <li class="achievement" data-achievement="five"><span class="achievement-icon" aria-hidden="true">✳</span><span><strong>En movimiento</strong><small>Completa 5 sesiones</small></span><span class="achievement-state">Pendiente</span></li>
+              <li class="achievement" data-achievement="streak"><span class="achievement-icon" aria-hidden="true">↗</span><span><strong>Ritmo constante</strong><small>Entrena 3 días seguidos</small></span><span class="achievement-state">Pendiente</span></li>
+              <li class="achievement" data-achievement="weekly"><span class="achievement-icon" aria-hidden="true">◎</span><span><strong>Meta semanal</strong><small id="weekly-achievement-description">Completa 4 sesiones</small></span><span class="achievement-state">Pendiente</span></li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel nutrition-tip" id="nutrition-section">
+            <div class="tip-badge">✳</div><div><p class="eyebrow">UNA IDEA PARA HOY</p><h2>El equilibrio empieza en el plato.</h2><p>Combina una fuente de proteína, vegetales de varios colores y un carbohidrato que te dé energía. Sin reglas rígidas.</p></div><button class="arrow-link" data-view="nutricion" aria-label="Ver nutrición">→</button>
+          </article>
+          <article class="premium-banner">
+            <div class="premium-shape" aria-hidden="true">✳</div><div class="premium-content"><span class="premium-badge">EN PREPARACIÓN</span><p class="eyebrow">FITAI PREMIUM</p><h2>Más claridad, cuando esté listo.</h2><p>Las funciones Premium aún se están definiendo. No hay cobros ni suscripciones activas.</p><button class="premium-button" data-open-premium>Ver estado del plan <span>→</span></button></div><span class="premium-sparkle">✦</span>
+          </article>
+        </section>
+        <footer class="page-footer"><span>FitAI · Bienestar a tu manera</span><span class="legal-notice"><span class="info-icon" aria-hidden="true">i</span>La información no sustituye el consejo de profesionales de la salud.</span></footer>
+      </main>
+    </div>
+
+    <aside class="analytics-consent" id="analytics-consent" aria-label="Preferencias de métricas" hidden>
+      <div><strong>Tu privacidad, a tu manera.</strong><p>Si aceptas, FitAI guardará métricas básicas de uso solo en este navegador. No se envían a un servidor ni incluyen comidas, fotos, salud, nombre o email.</p></div>
+      <div class="analytics-consent-actions"><button type="button" class="consent-accept" id="analytics-accept">Aceptar métricas locales</button><button type="button" class="consent-reject" id="analytics-reject">No aceptar</button></div>
+    </aside>
+
+    <nav class="mobile-nav" aria-label="Navegación móvil">
+      <a class="is-active" href="#inicio" data-view="inicio"><span>⌂</span>Inicio</a><a href="#entrenamiento" data-view="entrenamiento"><span>◈</span>Entrenar</a><a href="#nutrition-scanner" data-view="nutricion"><span>◉</span>Nutrición</a><a href="#mapa" data-view="mapa"><span>⌖</span>Mapa</a><a href="#chat" data-view="chat"><span>✦</span>Asistente</a><a href="#progreso" data-view="progreso"><span>↗</span>Progreso</a>
+    </nav>
+
+    <button class="chat-fab" id="open-chat" aria-label="Abrir chat"><span aria-hidden="true">✦</span><span class="chat-fab-label">Chat</span></button>
+
+    <dialog class="app-dialog marketing-dialog" id="onboarding-dialog" aria-labelledby="onboarding-title">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar">×</button>
+      <p class="eyebrow">TU ESPACIO, A TU MANERA</p><h2 id="onboarding-title">¿Qué te gustaría priorizar?</h2>
+      <p class="onboarding-intro" id="onboarding-intro">Elige una intención y una meta semanal. Puedes cambiarlas cuando quieras. Se guardan solo en este navegador; esto no crea una cuenta.</p>
+      <form id="onboarding-form">
+        <label for="onboarding-name">¿Cómo te llamamos? <span>Opcional</span></label>
+        <input id="onboarding-name" name="name" type="text" maxlength="40" autocomplete="given-name" placeholder="Tu nombre">
+        <label for="onboarding-focus">Mi prioridad por ahora</label>
+        <select id="onboarding-focus" name="focus"><option value="consistencia">Crear constancia, sin presión</option><option value="entrenamiento">Moverme y registrar entrenamientos</option><option value="nutricion">Conocer mejor mi alimentación</option></select>
+        <label for="onboarding-goal">Sesiones que me gustaría registrar por semana</label>
+        <select id="onboarding-goal" name="weeklyGoal"><option value="2">2 sesiones</option><option value="3">3 sesiones</option><option value="4" selected>4 sesiones</option><option value="5">5 sesiones</option><option value="6">6 sesiones</option><option value="7">7 sesiones</option></select>
+        <p class="onboarding-privacy">No pedimos peso, datos médicos ni permisos de salud. Tus preferencias no se sincronizan ni se envían.</p>
+        <button class="marketing-primary onboarding-submit" type="submit">Guardar mi espacio <span aria-hidden="true">→</span></button>
+      </form>
+    </dialog>
+
+    <dialog class="app-dialog marketing-dialog" id="analytics-dialog" aria-labelledby="analytics-title">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar">×</button>
+      <p class="eyebrow">MÉTRICAS CON CONSENTIMIENTO</p><h2 id="analytics-title">Datos de esta instalación</h2>
+      <p class="onboarding-intro">Las métricas son locales y no miden visitantes únicos ni permiten ver conversiones entre personas. No hay analítica remota conectada.</p>
+      <div class="local-metrics" id="local-metrics"></div>
+      <p class="analytics-status" id="analytics-status" role="status" aria-live="polite"></p>
+      <div class="analytics-dialog-actions"><button type="button" class="food-secondary-button" id="analytics-toggle">Activar métricas locales</button><button type="button" class="food-secondary-button" id="analytics-clear">Borrar métricas locales</button></div>
+    </dialog>
+
+    <dialog class="app-dialog" id="feature-dialog" aria-labelledby="dialog-title">
+      <button class="dialog-close" aria-label="Cerrar">×</button><p class="eyebrow" id="dialog-eyebrow">FITAI</p><h2 id="dialog-title">Tu asistente personal</h2><div class="dialog-body" id="dialog-body"></div><div class="dialog-actions" id="dialog-actions"></div>
+    </dialog>
+
+    <dialog class="app-dialog chat-dialog" id="chat-dialog" aria-labelledby="chat-title">
+      <button class="dialog-close" aria-label="Cerrar">×</button><p class="eyebrow">TU ASISTENTE DE BIENESTAR</p><h2 id="chat-title">Hablemos de tus objetivos.</h2>
+      <p class="chat-intro">Preguntas sobre rutinas, alimentación o cómo organizar tu semana: este espacio está listo para conectarse con un asistente de IA.</p>
+      <div class="chat-suggestions" id="chat-suggestions" aria-label="Sugerencias rápidas">
+        <button type="button" class="suggestion-chip" data-chat-suggestion="Armame una rutina">Armame una rutina</button>
+        <button type="button" class="suggestion-chip" data-chat-suggestion="¿Qué ceno hoy?">¿Qué ceno hoy?</button>
+        <button type="button" class="suggestion-chip" data-chat-suggestion="Ayudame a planificar mi semana">Planificar mi semana</button>
+      </div>
+      <div class="chat-messages" id="chat-messages" aria-live="polite"><div class="system-message"><span class="message-mark">✦</span><p>La conexión con IA todavía no está configurada. Tus mensajes no se enviarán a ningún servicio ni recibirás respuestas simuladas.</p></div></div>
+      <form class="chat-form" id="chat-form"><label class="sr-only" for="chat-input">Escribe tu consulta</label><input id="chat-input" name="message" placeholder="Escribe tu consulta..." autocomplete="off" required><button type="submit" aria-label="Enviar consulta">↑</button></form>
+      <p class="chat-footnote">Al conectar un servicio, evita compartir datos médicos sensibles.</p>
+    </dialog>
+  </body>
+</html>

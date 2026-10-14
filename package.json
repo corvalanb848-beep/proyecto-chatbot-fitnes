@@ -1,0 +1,12 @@
+{
+  "name": "fitai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FitAI con analisis visual de comidas desde un backend local",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
